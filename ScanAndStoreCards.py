@@ -18,7 +18,7 @@ def getContours(img):
             if area > maxArea and len(approx) == 4:
                 biggest = approx
                 maxArea = area
-    cv2.drawContours(imgContour, biggest, -1, (255, 0, 0), 20)
+    cv2.drawContours(imgContour, biggest, -1, (0, 0, 255), 10)
 
     # x,y,w,h = cv2.boundingRect(biggest)
     # cv2.rectangle(imgContour,(x,y),(x+w,y+h),(255,0,0),3)
@@ -55,6 +55,7 @@ def getWarp(img, biggest):
 
 url = 'http://192.168.43.1:8000/shot.jpg'
 
+s_count = 0
 
 while True:
     vid = cv2.VideoCapture(url)
@@ -75,15 +76,16 @@ while True:
         # imageArray = ([img,imgThres],
         #           [imgContour,imgWarped])
         imageArray = ([imgContour, imgWarped])
-        cv2.imshow("ImageWarped", imgWarped)
+        cv2.imshow("Card Only", imgWarped)
         if cv2.waitKey(1) & 0xFF == ord('d'):
-            cv2.imwrite("saved/Card-Saved.jpg",imgWarped)
+            s_count += 1
+            cv2.imwrite(f"saved/Card-Saved-{s_count}.jpg",imgWarped)
     else:
         # imageArray = ([img, imgThres],
         #               [img, img])
         imageArray = ([imgContour, img])
 
-    cv2.imshow("WorkFlow", imgContour)
+    cv2.imshow("Card Dot Detect", imgContour)
 
     v1 = np.vstack([imgGray, imgGray])
     v2 = np.vstack([imgBlur, imgCanny])
